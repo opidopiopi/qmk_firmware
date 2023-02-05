@@ -24,7 +24,8 @@ enum layers {
   MAIN = 0,
   NAV,
   SYM,
-  NUM
+  NUM,
+  GAMING
 };
 
 
@@ -52,7 +53,6 @@ bool caps_word_press_user(uint16_t keycode) {
     }
 }
 #endif
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [MAIN] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
@@ -92,13 +92,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [NUM] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_COMM,    KC_7,    KC_8,    KC_9, KC_MPLY, KC_BSPC,
+      QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TG(GAMING),                   KC_COMM,    KC_7,    KC_8,    KC_9, KC_MPLY, KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       RGB_TOG, RGB_HUI, RGB_SAI, XXXXXXX, XXXXXXX, RGB_VAI,                       KC_DOT,    KC_4,    KC_5,    KC_6, KC_MPRV, KC_MNXT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       RGB_MOD, RGB_HUD, RGB_SAD, XXXXXXX, XXXXXXX, RGB_VAD,                         KC_0,    KC_1,    KC_2,    KC_3, KC_VOLD, KC_VOLU,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LGUI, KC_LCTL, KC_SPC,      KC_ENT, KC_LSFT,  KC_DEL
+                                      //`--------------------------'  `--------------------------'
+  ),
+
+  [GAMING] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+       KC_ESC,  KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_I,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  TG(GAMING),
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      XXXXXXX, KC_LSFT,    KC_A,    KC_S,    KC_D, XXXXXXX,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      XXXXXXX, KC_LCTL,    KC_1,    KC_2,    KC_C,    KC_3,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_ESC,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                          KC_LGUI, KC_SPC, KC_SPC,      KC_ENT, KC_LSFT,  KC_DEL
                                       //`--------------------------'  `--------------------------'
   )
 };
