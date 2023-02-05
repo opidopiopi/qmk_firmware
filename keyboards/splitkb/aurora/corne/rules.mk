@@ -13,4 +13,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+MCU = atmega32u4
+BOOTLOADER = caterina
 DEFAULT_FOLDER = splitkb/aurora/corne/rev1
+
+OLED_ENABLE = no
+RGB_MATRIX_SUPPORTED = no
+RGBLIGHT_SUPPORTED = yes
+
+CAPS_WORD_ENABLE = yes
+
+RGBLIGHT_ENABLE = yes

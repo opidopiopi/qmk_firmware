@@ -16,7 +16,6 @@
 
 #pragma once
 
-// Not yet available in `info.json`
-#ifdef OLED_ENABLE
-#   define OLED_FONT_H "keyboards/splitkb/aurora/corne/glcdfont.c"
-#endif
+#define TAPPING_TERM 150
+
+#define DOUBLE_TAP_SHIFT_TURNS_CAPS_WORD
