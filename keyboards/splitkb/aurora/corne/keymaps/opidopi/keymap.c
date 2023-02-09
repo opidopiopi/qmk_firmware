@@ -25,12 +25,14 @@ enum layers {
   NAV,
   SYM,
   NUM,
-  GAMING
+  GAMING,
+  SPECIAL
 };
 
 
 #define LNAV_D LT(NAV, KC_D)
 #define LSYM_F LT(SYM, KC_F)
+#define LSPC_S LT(SPECIAL, KC_S)
 
 #ifdef CAPS_WORD_ENABLE
 bool caps_word_press_user(uint16_t keycode) {
@@ -94,9 +96,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, TG(GAMING),                   KC_COMM,    KC_7,    KC_8,    KC_9, KC_MPLY, KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RGB_TOG, RGB_HUI, RGB_SAI, XXXXXXX, XXXXXXX, RGB_VAI,                       KC_DOT,    KC_4,    KC_5,    KC_6, KC_MPRV, KC_MNXT,
+      RGB_TOG, RGB_HUI,  LSPC_S, XXXXXXX, XXXXXXX, RGB_VAI,                       KC_DOT,    KC_4,    KC_5,    KC_6, KC_MPRV, KC_MNXT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RGB_MOD, RGB_HUD, RGB_SAD, XXXXXXX, XXXXXXX, RGB_VAD,                         KC_0,    KC_1,    KC_2,    KC_3, KC_VOLD, KC_VOLU,
+      RGB_MOD, RGB_HUD, XXXXXXX, XXXXXXX, XXXXXXX, RGB_VAD,                         KC_0,    KC_1,    KC_2,    KC_3, KC_VOLD, KC_VOLU,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LGUI, KC_LCTL, KC_SPC,      KC_ENT, KC_LSFT,  KC_DEL
                                       //`--------------------------'  `--------------------------'
@@ -112,6 +114,71 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LGUI, KC_SPC, KC_SPC,      KC_ENT, KC_LSFT,  KC_DEL
                                       //`--------------------------'  `--------------------------'
+  ),
+
+  [SPECIAL] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                          XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX
+                                      //`--------------------------'  `--------------------------'
   )
 };
+
+
+#ifdef ENCODER_ENABLE
+bool encoder_update_kb(uint8_t index, bool clockwise) {
+  if (!encoder_update_user(index, clockwise)) {
+    return false;
+  }
+  if (index == 1) {
+    switch(biton32(layer_state)){
+      case SPECIAL:
+        register_code(KC_LCTL);
+        register_code(KC_LSFT);
+        if (clockwise) {
+          tap_code(KC_PGUP);
+        } else {
+          tap_code(KC_PGDN);
+        }
+        unregister_code(KC_LCTL);
+        unregister_code(KC_LSFT);
+        break;
+      case MAIN:
+        if (clockwise) {
+          SEND_STRING("kkkkk");
+        } else {
+          SEND_STRING("jjjjj");
+        }
+        break;
+      case NAV:
+        if (clockwise) {
+          tap_code(KC_PGUP);
+        } else {
+          tap_code(KC_PGDN);
+        }
+        break;
+      case SYM:
+        if (clockwise) {
+          tap_code(KC_VOLU);
+        } else {
+          tap_code(KC_VOLD);
+        }
+        break;
+      case NUM:
+        if (clockwise) {
+          rgblight_increase_hue();
+        } else {
+          rgblight_decrease_hue();
+        }
+        break;
+    }
+  }
+  return true;
+}
+#endif
 
